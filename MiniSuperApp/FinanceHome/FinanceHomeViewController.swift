@@ -46,7 +46,7 @@ final class FinanceHomeViewController: UIViewController, FinanceHomePresentable,
         self.view.addSubview(self.stackView)
         
         NSLayoutConstraint.activate([
-            self.stackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            self.stackView.topAnchor.constraint(equalTo: self.view.topAnchor),
             self.stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             self.stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
@@ -55,7 +55,7 @@ final class FinanceHomeViewController: UIViewController, FinanceHomePresentable,
     func addDashboard(_ view: ViewControllable) {
         let viewController = view.uiviewController
         addChild(viewController)
-        stackView.addSubview(viewController.view)
+        stackView.addArrangedSubview(viewController.view)
         viewController.didMove(toParent: self)
     }
 }
