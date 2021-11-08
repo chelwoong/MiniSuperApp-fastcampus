@@ -13,11 +13,14 @@ protocol CardOnFileRouting: ViewableRouting {
 
 protocol CardOnFilePresentable: Presentable {
     var listener: CardOnFilePresentableListener? { get set }
-    // TODO: Declare methods the interactor can invoke the presenter to present data.
+    
+    func update(with viewModels: [PaymentMethodViewModel])
 }
 
 protocol CardOnFileListener: AnyObject {
     func cardOnFileDidTapClose()
+    func cardOnFileDidTapAddCard()
+    func cardOnFileDidSelect(at index: Int)
 }
 
 final class CardOnFileInteractor: PresentableInteractor<CardOnFilePresentable>, CardOnFileInteractable, CardOnFilePresentableListener {
@@ -25,16 +28,21 @@ final class CardOnFileInteractor: PresentableInteractor<CardOnFilePresentable>, 
     weak var router: CardOnFileRouting?
     weak var listener: CardOnFileListener?
 
-    // TODO: Add additional dependencies to constructor. Do not perform any logic
-    // in constructor.
-    override init(presenter: CardOnFilePresentable) {
+    private let paymentMethods: [PaymentMethod]
+    
+    init(
+        presenter: CardOnFilePresentable,
+        paymentMethods: [PaymentMethod]
+    ) {
+        self.paymentMethods = paymentMethods
         super.init(presenter: presenter)
         presenter.listener = self
     }
 
     override func didBecomeActive() {
         super.didBecomeActive()
-        // TODO: Implement business logic here.
+        
+        self.presenter.update(with: self.paymentMethods.map(PaymentMethodViewModel.init))
     }
 
     override func willResignActive() {
@@ -46,7 +54,11 @@ final class CardOnFileInteractor: PresentableInteractor<CardOnFilePresentable>, 
         self.listener?.cardOnFileDidTapClose()
     }
     
-    func didSelectItem(at: Int) {
-        
+    func didSelectItem(at index: Int) {
+        if index >= self.paymentMethods.count {
+            self.listener?.cardOnFileDidTapAddCard()
+        } else {
+            self.listener?.cardOnFileDidSelect(at: index)
+        }
     }
 }
