@@ -7,7 +7,7 @@
 
 import ModernRIBs
 
-protocol TopupInteractable: Interactable, AddPaymentMethodListener {
+protocol TopupInteractable: Interactable, AddPaymentMethodListener, EnterAmountListener {
     var router: TopupRouting? { get set }
     var listener: TopupListener? { get set }
     var presentationDelegateProxy: AdaptivePresentationControllerDelegateProxy { get }
@@ -26,13 +26,18 @@ final class TopupRouter: Router<TopupInteractable>, TopupRouting {
     private let addPaymentMethodBuildable: AddPaymentMethodBuildable
     private var addPaymentMethodRouting: Routing?
     
+    private let enterAmountBuildable: EnterAmountBuildable
+    private var enterAmountRouting: Routing?
+    
     init(
         interactor: TopupInteractable,
         viewController: ViewControllable,
-        addPaymentMethodBuildable: AddPaymentMethodBuildable
+        addPaymentMethodBuildable: AddPaymentMethodBuildable,
+        enterAmountBuildable: EnterAmountBuildable
     ) {
         self.viewController = viewController
         self.addPaymentMethodBuildable = addPaymentMethodBuildable
+        self.enterAmountBuildable = enterAmountBuildable
         super.init(interactor: interactor)
         interactor.router = self
     }
@@ -58,8 +63,27 @@ final class TopupRouter: Router<TopupInteractable>, TopupRouting {
         guard let router = self.addPaymentMethodRouting else { return }
         
         self.dismissPresentedNavigation(completion: nil)
-        detachChild(router)
-        addPaymentMethodRouting = nil
+        self.detachChild(router)
+        self.addPaymentMethodRouting = nil
+    }
+    
+    func attachEnterAmount() {
+        if self.enterAmountRouting != nil {
+            return
+        }
+        
+        let router = self.enterAmountBuildable.build(withListener: self.interactor)
+        self.attachChild(router)
+        self.enterAmountRouting = router
+        self.presentInsideNavigation(router.viewControllable)
+    }
+    
+    func detachEnterAmount() {
+        guard let router = self.enterAmountRouting else { return }
+        
+        self.dismissPresentedNavigation(completion: nil)
+        self.detachChild(router)
+        self.enterAmountRouting = nil
     }
     
     private func presentInsideNavigation(_ viewControllable: ViewControllable) {
