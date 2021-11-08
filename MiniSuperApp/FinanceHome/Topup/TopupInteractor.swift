@@ -72,4 +72,9 @@ final class TopupInteractor: Interactor, TopupInteractable, AddPaymentMethodList
     func addPaymentMethodDidAddCard(paymentMethod: PaymentMethod) {
         
     }
+    
+    func enterAmountDidTapClose() {
+        router?.detachEnterAmount()
+        listener?.topupDidClose()
+    }
 }

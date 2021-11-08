@@ -17,7 +17,7 @@ protocol EnterAmountPresentable: Presentable {
 }
 
 protocol EnterAmountListener: AnyObject {
-    // TODO: Declare methods the interactor can invoke to communicate with other RIBs.
+    func enterAmountDidTapClose()
 }
 
 final class EnterAmountInteractor: PresentableInteractor<EnterAmountPresentable>, EnterAmountInteractable, EnterAmountPresentableListener {
@@ -43,7 +43,7 @@ final class EnterAmountInteractor: PresentableInteractor<EnterAmountPresentable>
     }
     
     func didTapClose() {
-        
+        listener?.enterAmountDidTapClose()
     }
     
     func didTapPaymentMethod() {
