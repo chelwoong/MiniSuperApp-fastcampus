@@ -54,7 +54,7 @@ final class AddPaymentMethodInteractor: PresentableInteractor<AddPaymentMethodPr
     
     func didTapConfirm(with number: String, cvc: String, expiry: String) {
         let info = AddPaymentInfo(number: number, cvc: cvc, expiration: expiry)
-        self.dependency.cardsOnFileRepository.addCard(info: info).sink(
+        self.dependency.cardOnFileRepository.addCard(info: info).sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] method in
                 self?.listener?.addPaymentMethodDidAddCard(paymentMethod: method)
