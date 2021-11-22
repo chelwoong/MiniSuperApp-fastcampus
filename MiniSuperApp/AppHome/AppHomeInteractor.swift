@@ -49,5 +49,4 @@ final class AppHomeInteractor: PresentableInteractor<AppHomePresentable>, AppHom
   func transportHomeDidTapClose() {
     router?.detachTransportHome()
   }
-  
 }

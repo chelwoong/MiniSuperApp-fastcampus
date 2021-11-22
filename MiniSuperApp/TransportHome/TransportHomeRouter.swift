@@ -1,6 +1,7 @@
 import ModernRIBs
+import Topup
 
-protocol TransportHomeInteractable: Interactable {
+protocol TransportHomeInteractable: Interactable, TopupListener {
   var router: TransportHomeRouting? { get set }
   var listener: TransportHomeListener? { get set }
 }
@@ -10,13 +11,37 @@ protocol TransportHomeViewControllable: ViewControllable {
 }
 
 final class TransportHomeRouter: ViewableRouter<TransportHomeInteractable, TransportHomeViewControllable>, TransportHomeRouting {
+    
+    private let topupBuildable: TopupBuildable
+    private var topupRouting: Routing?
   
-  override init(
+  init(
     interactor: TransportHomeInteractable,
-    viewController: TransportHomeViewControllable
+    viewController: TransportHomeViewControllable,
+    topupBuildable: TopupBuildable
   ) {
+    self.topupBuildable = topupBuildable
     super.init(interactor: interactor, viewController: viewController)
     interactor.router = self
   }
   
+    
+    func attachTopup() {
+        if topupRouting != nil {
+            return
+        }
+        
+        let router = self.topupBuildable.build(withListener: self.interactor)
+        self.topupRouting = router
+        attachChild(router)
+    }
+    
+    func detachTopup() {
+        guard let router = self.topupRouting else {
+            return
+        }
+        
+        self.detachChild(router)
+        self.topupRouting = nil
+    }
 }

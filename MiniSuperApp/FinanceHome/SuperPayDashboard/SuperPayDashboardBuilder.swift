@@ -7,6 +7,8 @@
 
 import ModernRIBs
 import Foundation
+import Combine
+import CombineUtil
 
 protocol SuperPayDashboardDependency: Dependency {
     var balance: ReadOnlyCurrentValuePublisher<Double> { get }

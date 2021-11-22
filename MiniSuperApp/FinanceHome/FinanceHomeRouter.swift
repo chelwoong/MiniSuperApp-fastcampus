@@ -1,4 +1,8 @@
 import ModernRIBs
+import SuperUI
+import AddPaymentMethod
+import Topup
+import RIBsUtil
 
 protocol FinanceHomeInteractable: Interactable, SuperPayDashboardListener, CardOnFileDashboardListener, AddPaymentMethodListener, TopupListener {
     var router: FinanceHomeRouting? { get set }
@@ -63,7 +67,7 @@ final class FinanceHomeRouter: ViewableRouter<FinanceHomeInteractable, FinanceHo
     func attachAddPaymentMethod() {
         guard self.addPaymentMethodRouting == nil else { return }
         
-        let router = self.addPaymentMethodBuildable.build(withListener: self.interactor)
+        let router = self.addPaymentMethodBuildable.build(withListener: self.interactor, closeButtonType: .close)
         let navigation = NavigationControllerable(root: router.viewControllable)
         navigation.navigationController.presentationController?.delegate = interactor.presentationDelegateProxy
         self.viewControllable.present(navigation, animated: true, completion: nil)

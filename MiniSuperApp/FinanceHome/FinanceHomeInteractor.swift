@@ -1,4 +1,6 @@
 import ModernRIBs
+import SuperUI
+import FinanceEntity
 
 protocol FinanceHomeRouting: ViewableRouting {
     func attachSuperPayDashboard()
@@ -69,6 +71,10 @@ final class FinanceHomeInteractor: PresentableInteractor<FinanceHomePresentable>
     }
     
     func topupDidClose() {
+        self.router?.detachTopup()
+    }
+    
+    func topupDidFinish() {
         self.router?.detachTopup()
     }
 }

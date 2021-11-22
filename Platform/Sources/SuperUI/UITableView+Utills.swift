@@ -1,0 +1,19 @@
+//
+//  UITableView+Utills.swift
+//  MiniSuperApp
+//
+//  Created by woongs on 2021/11/08.
+//
+
+import UIKit
+
+public extension UITableView {
+    
+    public func register(cellType: UITableViewCell.Type) {
+        self.register(cellType.self, forCellReuseIdentifier: "\(cellType)")
+    }
+    
+    public func dequeueReusableCell<T: UITableViewCell>(for indexPath: IndexPath) -> T {
+        return self.dequeueReusableCell(withIdentifier: "\(T.self)", for: indexPath) as! T
+    }
+}

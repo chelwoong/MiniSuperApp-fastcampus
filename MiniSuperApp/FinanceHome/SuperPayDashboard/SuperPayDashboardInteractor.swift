@@ -8,6 +8,7 @@
 import ModernRIBs
 import Combine
 import Foundation
+import CombineUtil
 
 protocol SuperPayDashboardRouting: ViewableRouting {
     // TODO: Declare methods the interactor can invoke to manage sub-tree via the router.
@@ -49,7 +50,9 @@ final class SuperPayDashboardInteractor: PresentableInteractor<SuperPayDashboard
     override func didBecomeActive() {
         super.didBecomeActive()
         
-        self.dependency.balance.sink { [weak self] balance in
+        self.dependency.balance
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] balance in
             self?.dependency.balanceFormatter.string(from: NSNumber(value: balance)).map({
                 self?.presenter.updateBalance($0)                
             })

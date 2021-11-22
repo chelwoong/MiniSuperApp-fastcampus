@@ -1,35 +1,53 @@
 import ModernRIBs
+import FinanceRepository
+import CombineUtil
+import Topup
 
 protocol TransportHomeDependency: Dependency {
+    var cardOnFileRepository: CardOnFileRepository { get }
+    var superPayRepository: SuperPayRepository { get }
 }
 
-final class TransportHomeComponent: Component<TransportHomeDependency> {
-
+final class TransportHomeComponent: Component<TransportHomeDependency>, TransportHomeInteractorDependency, TopupDependency {
+    var topupBaseViewController: ViewControllable
+    var cardOnFileRepository: CardOnFileRepository { self.dependency.cardOnFileRepository }
+    var superPayRepository: SuperPayRepository { self.dependency.superPayRepository }
+    var superPayBalance: ReadOnlyCurrentValuePublisher<Double> { self.superPayRepository.balance }
+    
+    init(
+        dependency: TransportHomeDependency,
+        topupBaseViewController: ViewControllable
+    ) {
+        self.topupBaseViewController = topupBaseViewController
+        super.init(dependency: dependency)
+    }
 }
 
 // MARK: - Builder
 
 protocol TransportHomeBuildable: Buildable {
-  func build(withListener listener: TransportHomeListener) -> TransportHomeRouting
+    func build(withListener listener: TransportHomeListener) -> TransportHomeRouting
 }
 
 final class TransportHomeBuilder: Builder<TransportHomeDependency>, TransportHomeBuildable {
-  
-  override init(dependency: TransportHomeDependency) {
-    super.init(dependency: dependency)
-  }
-  
-  func build(withListener listener: TransportHomeListener) -> TransportHomeRouting {
-    _ = TransportHomeComponent(dependency: dependency)
     
-    let viewController = TransportHomeViewController()
+    override init(dependency: TransportHomeDependency) {
+        super.init(dependency: dependency)
+    }
     
-    let interactor = TransportHomeInteractor(presenter: viewController)
-    interactor.listener = listener
-    
-    return TransportHomeRouter(
-      interactor: interactor,
-      viewController: viewController
-    )
-  }
+    func build(withListener listener: TransportHomeListener) -> TransportHomeRouting {
+        let viewController = TransportHomeViewController()
+        let component = TransportHomeComponent(dependency: dependency, topupBaseViewController: viewController)
+        
+        let topupBuilder = TopupBuilder(dependency: component)
+        
+        let interactor = TransportHomeInteractor(presenter: viewController, dependency: component)
+        interactor.listener = listener
+        
+        return TransportHomeRouter(
+            interactor: interactor,
+            viewController: viewController,
+            topupBuildable: topupBuilder
+        )
+    }
 }
