@@ -1,3 +1,4 @@
+import Foundation
 import ModernRIBs
 import Combine
 import FinanceEntity
@@ -52,11 +53,13 @@ final class AddPaymentMethodInteractor: PresentableInteractor<AddPaymentMethodPr
     
     func didTapConfirm(with number: String, cvc: String, expiry: String) {
         let info = AddPaymentInfo(number: number, cvc: cvc, expiration: expiry)
-        self.dependency.cardOnFileRepository.addCard(info: info).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] method in
-                self?.listener?.addPaymentMethodDidAddCard(paymentMethod: method)
-            }
-        ).store(in: &self.cancellables)
+        self.dependency.cardOnFileRepository.addCard(info: info)
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { _ in },
+                receiveValue: { [weak self] method in
+                    self?.listener?.addPaymentMethodDidAddCard(paymentMethod: method)
+                }
+            ).store(in: &self.cancellables)
     }
 }
