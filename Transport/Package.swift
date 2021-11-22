@@ -23,8 +23,6 @@ let package = Package(
                 "ModernRIBs",
                 .product(name: "FinanceRepository", package: "Finance"),
                 .product(name: "Topup", package: "Finance"),
-//                "Topup",
-//                .product(name: "SuperUI", package: "Platform"),
             ],
             resources: [
                 .process("Resources"),
