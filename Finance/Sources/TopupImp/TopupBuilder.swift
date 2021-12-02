@@ -11,12 +11,14 @@ import CombineUtil
 import AddPaymentMethod
 import FinanceEntity
 import Topup
+import CombineSchedulers
 
 public protocol TopupDependency: Dependency {
     var topupBaseViewController: ViewControllable { get }
     var cardOnFileRepository: CardOnFileRepository { get }
     var superPayRepository: SuperPayRepository{ get }
     var addPaymentMethodBuildable: AddPaymentMethodBuildable { get }
+    var mainQueue: AnySchedulerOf<DispatchQueue> { get }
 }
 
 final class TopupComponent: Component<TopupDependency>, TopupInteractorDependency, EnterAmountDependency, CardOnFileDependency {
@@ -25,6 +27,7 @@ final class TopupComponent: Component<TopupDependency>, TopupInteractorDependenc
     var selectedPaymentMethod: ReadOnlyCurrentValuePublisher<PaymentMethod> { self.paymentMethodStream }
     var cardOnFileRepository: CardOnFileRepository { self.dependency.cardOnFileRepository }
     var addPaymentMethodBuildable: AddPaymentMethodBuildable { self.dependency.addPaymentMethodBuildable }
+    var mainQueue: AnySchedulerOf<DispatchQueue> { self.dependency.mainQueue }
     fileprivate var topupBaseViewController: ViewControllable { self.dependency.topupBaseViewController }
     
     let paymentMethodStream: CurrentValuePublisher<PaymentMethod>
