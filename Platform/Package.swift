@@ -56,6 +56,12 @@ let package = Package(
             ]
         ),
         .target(
+            name: "RIBsTestSupport",
+            dependencies: [
+                "ModernRIBs"
+            ]
+        ),
+        .target(
             name: "SuperUI",
             dependencies: [
                 "RIBsUtil"
