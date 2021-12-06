@@ -1,0 +1,25 @@
+{
+    "cards": [
+        {
+            "id": "999",
+            "name": "우리은행",
+            "digits": "**** 0123",
+            "color": "#f19a38ff",
+            "isPrimary": false
+        },
+        {
+            "id": "999",
+            "name": "신한은행",
+            "digits": "**** 1234",
+            "color": "#3478f6ff",
+            "isPrimary": false
+        },
+        {
+            "id": "999",
+            "name": "국민은행",
+            "digits": "**** 0323",
+            "color": "#78c5f5ff",
+            "isPrimary": false
+        }
+    ]
+}

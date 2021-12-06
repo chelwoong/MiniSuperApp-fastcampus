@@ -2,7 +2,7 @@
 //  MiniSuperAppUITests.swift
 //  MiniSuperAppUITests
 //
-//  Created by kakao on 2021/12/06.
+//  Created by woongs on 2021/12/06.
 //
 
 import XCTest
