@@ -28,7 +28,7 @@ protocol EnterAmountPresentable: Presentable {
 protocol EnterAmountListener: AnyObject {
     func enterAmountDidTapClose()
     func enterAmountDidTapPaymentMethod()
-    func enterAmountDidFinisheTopup()
+    func enterAmountDidFinishTopup()
 }
 
 protocol EnterAmountInteractorDependency {
@@ -90,7 +90,7 @@ final class EnterAmountInteractor: PresentableInteractor<EnterAmountPresentable>
                 self?.presenter.stopLoading()
             },
             receiveValue: { [weak self] in
-                self?.listener?.enterAmountDidFinisheTopup()
+                self?.listener?.enterAmountDidFinishTopup()
             }
         ).store(in: &self.cancellables)
     }

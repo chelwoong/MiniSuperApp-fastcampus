@@ -17,12 +17,20 @@ let package = Package(
             targets: ["AddPaymentMethodImp"]
         ),
         .library(
+            name: "AddPaymentMethodTestSupport",
+            targets: ["AddPaymentMethodTestSupport"]
+        ),
+        .library(
             name: "Topup",
             targets: ["Topup"]
         ),
         .library(
             name: "TopupImp",
             targets: ["TopupImp"]
+        ),
+        .library(
+            name: "TopupTestSupport",
+            targets: ["TopupTestSupport"]
         ),
         .library(
             name: "FinanceHome",
@@ -66,6 +74,15 @@ let package = Package(
             ]
         ),
         .target(
+            name: "AddPaymentMethodTestSupport",
+            dependencies: [
+                "ModernRIBs",
+                "FinanceEntity",
+                .product(name: "RIBsUtil", package: "Platform"),
+                .product(name: "RIBsTestSupport", package: "Platform")
+            ]
+        ),
+        .target(
             name: "FinanceHome",
             dependencies: [
                 "ModernRIBs",
@@ -97,6 +114,12 @@ let package = Package(
             ]
         ),
         .target(
+            name: "TopupTestSupport",
+            dependencies: [
+                "Topup",
+            ]
+        ),
+        .target(
             name: "FinanceEntity",
             dependencies: []
         ),
@@ -120,7 +143,10 @@ let package = Package(
             name: "TopupImpTests",
             dependencies: [
                 "TopupImp",
-                "FinanceRepositoryTestSupport"
+                "FinanceRepositoryTestSupport",
+                "TopupTestSupport",
+                "AddPaymentMethodTestSupport",
+                .product(name: "RIBsTestSupport", package: "Platform"),
             ]
         )
     ]
