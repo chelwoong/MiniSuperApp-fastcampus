@@ -16,6 +16,10 @@ let package = Package(
             targets: ["RIBsUtil"]
         ),
         .library(
+            name: "RIBsTestSupport",
+            targets: ["RIBsTestSupport"]
+        ),
+        .library(
             name: "SuperUI",
             targets: ["SuperUI"]
         ),
