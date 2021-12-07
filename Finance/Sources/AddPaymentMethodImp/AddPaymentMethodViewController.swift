@@ -15,6 +15,7 @@ final class AddPaymentMethodViewController: UIViewController, AddPaymentMethodPr
     private let cardNumberTextField: UITextField = {
         let textField = makeTextField()
         textField.placeholder = "카드 번호"
+        textField.accessibilityIdentifier = "addpaymentmethod_cardnumber_textfield"
         return textField
     }()
     
@@ -31,12 +32,14 @@ final class AddPaymentMethodViewController: UIViewController, AddPaymentMethodPr
     private let securityTextField: UITextField = {
         let textField = makeTextField()
         textField.placeholder = "CVC"
+        textField.accessibilityIdentifier = "addpaymentmethod_security_textfield"
         return textField
     }()
     
     private let expirationTextField: UITextField = {
         let textField = makeTextField()
         textField.placeholder = "유효기간"
+        textField.accessibilityIdentifier = "addpaymentmethod_expiry_textfield"
         return textField
     }()
     
@@ -46,6 +49,7 @@ final class AddPaymentMethodViewController: UIViewController, AddPaymentMethodPr
         button.roundCorners()
         button.backgroundColor = .primaryRed
         button.setTitle("추가하기", for: .normal)
+        button.accessibilityIdentifier = "addpaymentmethod_addcard_button"
         button.addTarget(self, action: #selector(didTapAddCard), for: .touchUpInside)
         return button
     }()
